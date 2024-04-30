@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados para {{ endpoint }}</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,7 +58,7 @@
         <h1>Resultados para {{ endpoint }}</h1>
 
         <div class="scrollable-table">
-            <table>
+            <table id="TableToExport">
                 <thead>
                     <tr>
                         <th>Fecha</th>
@@ -76,7 +76,7 @@
             </table>
         </div>
 
-        <button class="export-button" onclick="exportToExcel('dataTable')">Exportar a Excel</button>
+        <button id="sheetjsexport" class="export-button" onclick="exportToExcel('dataTable')">Exportar a Excel</button>
         <button class="back-button" onclick="window.location.href='/'">Volver al Menú Principal</button>
     </div>
 
@@ -86,5 +86,13 @@
             XLSX.writeFile(wb, 'data.xlsx');
         }
     </script>
+    <script>
+        document.getElementById("sheetjsexport").addEventListener('click', function() {
+          /* Create worksheet from HTML DOM TABLE */
+          var wb = XLSX.utils.table_to_book(document.getElementById("TableToExport"));
+          /* Export to file (start a download) */
+          XLSX.writeFile(wb, "Resultado de Consulta - {{endpoint}}.xlsx");
+        });
+        </script>
 </body>
 </html>
